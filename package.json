@@ -1,6 +1,9 @@
 {
   "name": "gflbans-web",
   "version": "0.1.0",
+  "description": "Web frontend for GFLBans",
+  "homepage": "https://gflclan.com",
+  "license": "GPL-3.0-only",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,16 +12,29 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^3.0.0"
+    "uuid": "^8.3.2",
+    "vue": "^3.0.0",
+    "vue-class-component": "^8.0.0-0",
+    "vue-property-decorator": "^9.1.2",
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@types/uuid": "^8.3.3",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0"
+    "eslint-plugin-vue": "^7.0.0",
+    "sass": "^1.45.1",
+    "sass-loader": "^10.2.0",
+    "typescript": "~4.1.5"
   },
   "eslintConfig": {
     "root": true,
@@ -27,10 +43,11 @@
     },
     "extends": [
       "plugin:vue/vue3-essential",
-      "eslint:recommended"
+      "eslint:recommended",
+      "@vue/typescript"
     ],
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@typescript-eslint/parser"
     },
     "rules": {}
   },
