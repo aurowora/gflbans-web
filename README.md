@@ -4,7 +4,7 @@ The Web Frontend for GFLBans. This project, although public, is likely not usefu
 
 ### Configuration
 
-The configuration for the application is defined in `src/globals.ts`. Set `INSTANCE` to the location that the GFLBans API server can be found at and `PUBLIC_URI` to the location the app is to be hosted.
+The configuration for the application is defined in `src/config.ts`. Set `INSTANCE` to the location that the GFLBans API server can be found at and `PUBLIC_URI` to the location the app is to be hosted.
 
 ### Building
 
