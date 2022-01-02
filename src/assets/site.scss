@@ -1,0 +1,55 @@
+/*
+  This file is part of GFLBans Web and is licensed under the terms of the third version (only) of the GNU General Public License.
+  See README.md and LICENSE.txt for more information.
+
+  This declares some global styles. In general, I try to refrain from setting stuff here as I'd prefer to use the available bulma classes and per-component style where possible
+*/
+
+/*
+    Declare fonts used throughout GFLBans
+*/
+
+@font-face {
+    font-family: "Montserrat-Medium";
+    font-weight: 500;
+    font-style: normal;
+    font-display: auto;
+    src: local("Montserrat-Medium"), url("~@/assets/fonts/Montserrat/Montserrat-Medium.woff2") format("woff2"), url("~@/assets/fonts/Montserrat/Montserrat-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Montserrat-Bold";
+    font-weight: 700;
+    font-style: normal;
+    font-display: auto;
+    src: local("Montserrat-Bold"), url("~@/assets/fonts/Montserrat/Montserrat-Bold.woff2") format("woff2"), url("~@/assets/fonts/Montserrat/Montserrat-Bold.ttf") format("truetype");
+}
+
+/* Not used
+@font-face {
+    font-family: "Montserrat-Light";
+    font-weight: 300;
+    font-style: normal;
+    font-display: auto;
+    src: local("Montserrat-Light"), url("/fonts/Montserrat/Montserrat-Light.woff2") format("woff2"), url("/fonts/Montserrat/Montserrat-Light.ttf") format("ttf");
+}
+*/
+
+@font-face {
+    font-family: "Montserrat-Regular";
+    font-weight: 400;
+    font-style: normal;
+    font-display: auto;
+    src: local("Montserrat-Regular"), url("~@/assets/fonts/Montserrat/Montserrat-Regular.woff2") format("woff2"), url("~@/assets/fonts/Montserrat/Montserrat-Regular.ttf") format("truetype");
+}
+
+/*
+    Get rid of the vertical scroll if we do not need it
+*/
+html {
+    overflow-y: auto;
+}
+
+html, body, #app {
+    height: 100%;
+}

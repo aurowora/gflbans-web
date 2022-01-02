@@ -13,4 +13,10 @@ function slash_fix(input: string): string
     return input.endsWith('/') ? input : input + '/';
 }
 
-export {slash_fix};
+/* Awaitable sleep function */
+function sleep(msToSleep: number): Promise<void>
+{
+    return new Promise((resolve: TimerHandler) => setTimeout(resolve, msToSleep));
+}
+
+export {slash_fix, sleep};

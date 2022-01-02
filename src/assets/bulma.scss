@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+@import "../../node_modules/bulma/sass/utilities/initial-variables.sass";
+
+// Change the blue used throughout to the GFL Blue
+$blue: #0B5FB5;
+
+@import "../../node_modules/bulma/bulma.sass";
+@import "@/vendor/bulma-o-steps/steps.sass";
+// @import "~@creativebulma/bulma-collapsible"
+@import "../../node_modules/bulma-list/sass/bulma-list.sass";
+

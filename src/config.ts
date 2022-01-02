@@ -9,14 +9,60 @@
     The GFLBans instance to use
 
     This must always end with a slash
+
+    NOTE THAT THIS APPLICATION MUST BE HOSTED ON THE SAME DOMAIN AS THE API
 */
-const INSTANCE = "https://bans.aurora.vg/";
+export const INSTANCE = "https://bans.aurora.vg/";
 
 /*
     The Public URI of this application
 
     This is used to generate the redirect uri for the login process, so make sure it's also added to the IPS OAuth app
 */
-const PUBLIC_URI  = "http://127.0.0.1:8080/";
+export const PUBLIC_URI  = "http://127.0.0.1:8080/";
 
-export {INSTANCE, PUBLIC_URI};
+
+/*
+  The name of the application for branding purposes.
+
+  You'll want to change this in public/index.html too.
+*/
+export const APP_NAME = "GFLBans";
+
+/*
+  The link to direct a user to for support if something goes wrong.
+*/
+
+export const SUPPORT_LINK = "https://gflclan.com/messenger/compose/?to=1623";
+
+/*
+  Set to true for production builds.
+
+  PRODUCTION = false relaxes security restrictions around cookies / CORS, so be sure to enable PRODUCTION when in PRODUCTION
+*/
+export const PRODUCTION = false;
+
+/*
+  Set to the default URL to bring people looking to appeal their bans.
+
+  Used if the server doesn't have an associated appeal form
+*/
+export const DEFAULT_APPEALS_FORM = "https://gflclan.com/messenger/compose/?to=1028";
+
+/* 
+  Configure which services are enabled for the ban finder
+
+  If only one is enabled, it will be used without prompting the user
+*/
+export const BAN_FINDER_SERVICES = [
+  {platform: 'steam', enabled: true},
+  {platform: 'discord', enabled: true}
+]
+
+
+/*
+  The name of the community that this is for. 
+
+  Used throughout various templates
+*/
+export const COMMUNITY_NAME = "GFLClan";

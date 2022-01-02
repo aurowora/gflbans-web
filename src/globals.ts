@@ -42,4 +42,13 @@ enum Permission
 
 const adminPermissions = Permission.MANAGE_API_KEYS | Permission.MANAGE_GROUPS | Permission.MANAGE_MAP_ICONS | Permission.MANAGE_POLICY | Permission.MANAGE_SERVERS | Permission.MANAGE_VPNS
 
-export { Permission, adminPermissions };
+/* Theme color to CSS class */
+const COLORS = ['link', 'primary', 'info', 'success', 'warning', 'danger'];
+
+/* Games we have icons for */
+const GAMES = new Map<string, string>();
+GAMES.set('garrysmod', 'garrysmod.svg');
+GAMES.set('cstrike', 'css.webp');
+GAMES.set('csgo', 'csgo.webp');
+
+export { Permission, adminPermissions, COLORS, GAMES };

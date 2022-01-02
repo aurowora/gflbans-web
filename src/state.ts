@@ -1,17 +1,35 @@
 import { InjectionKey } from 'vue';
 import { createStore, Store, useStore as _useStore } from 'vuex';
 import { CurrentUserInfo } from './gflbans/login';
-import { adminPermissions } from '@/globals';
+import { adminPermissions, COLORS } from '@/globals';
+import { GFLBansError } from './errors';
+import { IServer } from './gflbans/servers';
+import { ILoaderInfo } from './loading';
 
 // Changes to this need to be applied to vuex.d.ts
 interface State {
     csrf_token?: string;
     current_user?: CurrentUserInfo;
+    current_error?: GFLBansError;
+    loading: boolean;
+    theme_color: number;
+    servers?: IServer[];
+    small_loading: ILoaderInfo
 }
+
+const colorAtLoad = localStorage.getItem('gflbans_color');
 
 const key: InjectionKey<Store<State>> = Symbol();
 const store = createStore<State>({
-    state: {},
+    state: {
+        csrf_token: undefined,
+        current_error: undefined,
+        current_user: undefined,
+        loading: false,
+        theme_color: colorAtLoad ? parseInt(colorAtLoad) : 0,
+        servers: undefined,
+        small_loading: {is_loading: false, loader_text: 'Loading…'}
+    },
     getters: {
         isAdmin(state)
         {
@@ -21,6 +39,55 @@ const store = createStore<State>({
             } else {
                 return false;
             }
+        },
+        isLoggedIn(state)
+        {
+            return state.current_user !== undefined;
+        },
+        isThemeClass(state)
+        {
+            const themeIdx = state.theme_color;
+
+            if (themeIdx > COLORS.length - 1)
+            {
+                return 'is-link'
+            } else {
+                return `is-${COLORS[themeIdx]}`
+            }
+        },
+        hasTextThemeClass(state)
+        {
+            const themeIdx = state.theme_color;
+
+            if (themeIdx > COLORS.length - 1)
+            {
+                return 'has-text-link'
+            } else {
+                return `has-text-${COLORS[themeIdx]}`
+            }
+        }
+    },
+    mutations: {
+        setError(state, err: GFLBansError)
+        {
+            state.current_error = err;
+        },
+        setLoading(state, is_loading: boolean)
+        {
+            state.loading = is_loading;
+        },
+        setUser(state, user?: CurrentUserInfo)
+        {
+            state.current_user = user;
+        },
+        setThemeColor(state, color: number)
+        {
+            localStorage.setItem('gflbans_color', color.toString());
+            state.theme_color = color;
+        },
+        setServers(state, servers: IServer[])
+        {
+            state.servers = servers;
         }
     }
 });
