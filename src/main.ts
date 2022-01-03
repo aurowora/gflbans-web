@@ -15,12 +15,12 @@ import '@/assets/site.scss';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faExclamationTriangle, faGavel, faHome, faServer, faUserShield, faRightToBracket, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faGavel, faHome, faServer, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard } from '@fortawesome/free-solid-svg-icons';
 import { ArgumentError, GFLBansError, HTTPError, NetworkError, StateError, SecurityError } from './errors';
 import VueScreen from 'vue-screen';
 import { adminPermissions } from './globals';
 
-library.add(faGavel, faHome, faServer, faExclamationTriangle, faUserShield, faRightToBracket, faSignOut);
+library.add(faGavel, faHome, faServer, faExclamationTriangle, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard);
 
 // Initialize the router
 const Home = () => import('@/components/Home/Home.vue');

@@ -7,7 +7,7 @@
     <div class="serverMain container" v-if="hasServers">
         <div class="section">
           <h1 class="title has-text-white">Servers</h1>
-          <Server v-for="server in servers" :key="server.id" :id="server.id" :os="server.os" :game="server.mod" :hostname="server.hostname" :friendly_name="server.friendly_name" :ip="server.ip" :online="server.online" :player_count="server.player_count" :max_players="server.max_players" :map="server.map"></Server>
+          <Server v-for="server in servers" :key="server.id" :server="server"></Server>
         </div>
         
     </div>

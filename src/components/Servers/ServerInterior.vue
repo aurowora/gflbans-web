@@ -13,20 +13,7 @@
         <div class="column" v-if="loaded">
             <h1 class="is-size-5 has-text-white">Players ({{players.length}})</h1>
             <div class="list has-overflow-ellipsis" v-if="players.length > 0">
-                <div class="list-item" v-for="player in players" :key="player.gs_id">
-                    <div class="list-item-image">
-                        <figure class="image is-64x64">
-                            <img v-if="player.gs_avatar" class="is-rounded" :src="`${INST}file/uploads/${player.gs_avatar.file_id}/avatar.webp`" />
-                            <!--TODO: Default avatar image -->
-                            <img v-else class="is-rounded" src="@/assets/pinwheel.webp" />
-                        </figure>
-                    </div>
-
-                    <div class="list-item-content">
-                        <div class="list-item-title has-text-white">{{ player.gs_name }}</div>
-                        <div class="list-item-description has-text-white">{{ formatPlayerPlaytime(player) }}</div>
-                    </div>
-                </div>
+                <PlayerRow v-for="player in players" :key="player.gs_id" :player="player" :server="server"></PlayerRow>
             </div>
             <p class="has-text-white is-faded is-size-6" v-else>No players are connected.</p>
         </div>
@@ -40,29 +27,14 @@
 <script lang="ts">
 import { INSTANCE } from "@/config";
 import { EncodingError, GFLBansError, HTTPError, NetworkError } from "@/errors";
-import { getPlayers, IPlayer } from "@/gflbans/servers";
+import { getPlayers, IPlayer, IServer } from "@/gflbans/servers";
 import { Options, Vue } from "vue-class-component";
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-
-dayjs.extend(relativeTime);
+import PlayerRow from './PlayerRow.vue';
 
 @Options({
     props: {
-        id: {
-            type: String,
-            required: true
-        },
-        map: {
-            type: String,
-            required: true
-        },
-        game: {
-            type: String,
-            required: true
-        },
-        hostname: {
-            type: String,
+        server: {
+            type: Object,
             required: true
         }
     },
@@ -71,25 +43,48 @@ dayjs.extend(relativeTime);
         {
             clearInterval(this.intervalId);
         }
+    },
+    components: {
+        PlayerRow
     }
 })
 
 export default class ServerInterior extends Vue {
     // prop
-    id!: string;
+    server!: IServer
 
     // data
     imageErr = false;
     intervalId?: number;
     players: IPlayer[] = [];
-    INST = INSTANCE;
     loaded = false;
+
+    // template globals
+    INST = INSTANCE;
+
+    // getters
+    get game()
+    {
+        return this.server.mod ? this.server.mod : ''
+    }
+
+    get map()
+    {
+        return this.server.map ? this.server.map : ''
+    }
 
     // Called by the parent component to begin loading when it is opened (so we don't spam the server with useless requests)
     // (Fetches the player list)
     activate()
     {
+        console.log('server activated')
         this.refreshPlayers();
+
+        if (this.intervalId)
+        {
+            clearInterval(this.intervalId);
+        }
+
         this.intervalId = setInterval(this.refreshPlayers, 60000);
     }
 
@@ -97,11 +92,11 @@ export default class ServerInterior extends Vue {
     {
         const t = this;
 
-        getPlayers(this.id).then(function (result) {
+        getPlayers(this.server.id).then(function (result) {
             if (result instanceof NetworkError || result instanceof EncodingError || result instanceof HTTPError)
             {
                 t.$store.commit('setError', result);
-            } else if (t.$store.state.current_user !== undefined && t.$store.state.current_user.avatar_id) {
+            } else {
                 console.log('Got player list', result);
                 t.players = result;
                 t.loaded = true;
@@ -115,13 +110,6 @@ export default class ServerInterior extends Vue {
     {
         this.imageErr = true;
     }
-
-    formatPlayerPlaytime(player: IPlayer): string
-    {
-        const playtime = dayjs.unix((Date.now() / 1000) - player.playtime);
-        return `For ${playtime.fromNow(true)}`;
-    }
-
 }
 </script>
 
@@ -135,11 +123,6 @@ img {
 .list {
     overflow-y: auto;
     max-height: 190px;
-}
-
-.list-item:not(:last-child):not(.box)
-{
-    border-bottom: none !important;
 }
 
 h1 {

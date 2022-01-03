@@ -11,7 +11,6 @@ import { ILoaderInfo } from './loading';
 declare module '@vue/runtime-core' {
   // Changes to this need to be applied to state.ts
   interface State {
-    csrf_token?: string;
     current_user?: CurrentUserInfo;
     current_error?: GFLBansError;
     loading: boolean;

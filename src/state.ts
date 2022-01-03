@@ -13,7 +13,6 @@ import { ILoaderInfo } from './loading';
 
 // Changes to this need to be applied to vuex.d.ts
 interface State {
-    csrf_token?: string;
     current_user?: CurrentUserInfo;
     current_error?: GFLBansError;
     loading: boolean;
@@ -27,7 +26,6 @@ const colorAtLoad = localStorage.getItem('gflbans_color');
 const key: InjectionKey<Store<State>> = Symbol();
 const store = createStore<State>({
     state: {
-        csrf_token: undefined,
         current_error: undefined,
         current_user: undefined,
         loading: false,

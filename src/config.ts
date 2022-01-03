@@ -5,6 +5,8 @@
   This file acts as a configuration file of sorts of the app
 */
 
+import { Opener } from "./join";
+
 /*
     The GFLBans instance to use
 
@@ -59,10 +61,16 @@ export const BAN_FINDER_SERVICES = [
   {platform: 'discord', enabled: true}
 ]
 
-
 /*
   The name of the community that this is for. 
 
   Used throughout various templates
 */
 export const COMMUNITY_NAME = "GFLClan";
+
+/* 
+  Set a default handler for connect button
+
+  ex: to use steam connect links for anything not explicitly supported: export const DEFAULT_JOIN_HANDLER = joinSteamServer
+*/
+export const DEFAULT_JOIN_HANDLER: Opener | null = null;

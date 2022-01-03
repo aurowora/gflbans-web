@@ -3,6 +3,9 @@
   See README.md and LICENSE.txt for more information.
 */
 
+import { EncodingError, HTTPError, NetworkError } from "@/errors";
+import { csrf_init } from "./login";
+
 /*
     Appends a forward slash to a string if it hasn't already got one
 */
@@ -19,4 +22,23 @@ function sleep(msToSleep: number): Promise<void>
     return new Promise((resolve: TimerHandler) => setTimeout(resolve, msToSleep));
 }
 
-export {slash_fix, sleep};
+let csrf_token: string | undefined;
+
+async function get_csrf_token(): Promise<string | NetworkError | EncodingError | HTTPError >
+{
+    if (!csrf_token)
+    {
+        const r = await csrf_init()
+
+        if (typeof(r) !== 'string')
+        {
+            return r;
+        }
+
+        csrf_token = r;
+    }
+
+    return csrf_token;
+}
+
+export {slash_fix, sleep, get_csrf_token};

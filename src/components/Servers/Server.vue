@@ -5,22 +5,22 @@
 
 <template>
     <article class="message" :class="[$store.getters.isThemeClass]">
-        <div @click="toggle" class="message-header" :class="[open ? '' : 'is-closed', online ? 'clickable' : '']">
-            <template v-if="online">
+        <div @click="toggle" class="message-header" :class="[open ? '' : 'is-closed', server.online ? 'clickable' : '']">
+            <template v-if="server.online">
                 <span>
                     <span class="icon-text">
                         <span class="icon">
-                            <font-awesome-icon :icon="osIcon" size="lg" />
-                        </span>
-                        <span class="icon">
                             <img :src="gameIcon" />
                         </span>
-                        <span>{{ hostname }}</span>
-                        <span class="ip">({{ ip }})</span>
+                        <span class="icon">
+                            <font-awesome-icon :icon="osIcon" size="lg" />
+                        </span>
+                        <span>{{ server.hostname }}</span>
+                        <span class="ip">({{ server.ip }}:{{ server.game_port }})</span>
                     </span>
                 </span>
                 <span>
-                    {{ player_count }} / {{ max_players }}
+                    {{ server.player_count }} / {{ server.max_players }}
                 </span>
             </template>
             <template v-else>
@@ -28,18 +28,18 @@
                     <span class="icon">
                         <font-awesome-icon icon="server" size="lg" />
                     </span>
-                    <span v-if="friendly_name">
-                        {{ friendly_name }} ({{ ip }})
+                    <span v-if="server.friendly_name">
+                        {{ server.friendly_name }} ({{ server.ip }}:{{ server.game_port }})
                     </span>
                     <span v-else>
-                        {{ ip }}
+                        {{ server.ip }}:{{ server.game_port }}
                     </span>
                 </span>
                 <span>Offline</span>
             </template>
         </div>
         <div v-if="open && openable" class="message-body has-text-white">
-            <ServerInterior ref="interior" :id="id" :map="map" :hostname="hostname" :game="game"></ServerInterior>
+            <ServerInterior ref="interior" :server="server"></ServerInterior>
         </div>
     </article>
 </template>
@@ -49,28 +49,11 @@ import { Options, Vue } from "vue-class-component";
 import { faApple, faWindows, faLinux } from '@fortawesome/free-brands-svg-icons';
 import { GAMES } from "@/globals";
 import ServerInterior from "./ServerInterior.vue";
+import { IServer } from "@/gflbans/servers";
 
 @Options({
     props: {
-        id: {
-            type: String,
-            required: true
-        },
-        os: String,
-        game: String,
-        hostname: String,
-        ip: {
-            type: String,
-            required: true
-        },
-        player_count: Number,
-        max_players: Number,
-        online: {
-            type: Boolean,
-            required: true
-        },
-        friendly_name: String,
-        map: String
+        server: Object
     },
     components: {
         ServerInterior
@@ -78,16 +61,7 @@ import ServerInterior from "./ServerInterior.vue";
 })
 export default class Server extends Vue {
     // Props
-    id!: string;
-    os!: string;
-    game!: string;
-    hostname!: string;
-    ip!: string;
-    player_count!: number;
-    max_players!: number;
-    online!: boolean;
-    friendly_name!: string;
-    map!: string;
+    server!: IServer
 
     // Data
     open = false;
@@ -95,7 +69,7 @@ export default class Server extends Vue {
     //Methods
     toggle()
     {
-        if (this.online)
+        if (this.server.online)
         {
             this.open = !this.open;
 
@@ -112,7 +86,7 @@ export default class Server extends Vue {
     // Comp props
     get osIcon()
     {
-        switch (this.os) {
+        switch (this.server.os) {
             case "apple":
                 return faApple;
             case "windows":
@@ -126,16 +100,16 @@ export default class Server extends Vue {
 
     get gameIcon()
     {
-        if (GAMES.has(this.game))
+        if (this.server.mod && GAMES.has(this.server.mod))
         {
-            return `/games/${GAMES.get(this.game)}`;
+            return `/games/${GAMES.get(this.server.mod)}`;
         }
         return '/games/fallback.webp';
     }
 
     get openable()
     {
-        return this.online;
+        return this.server.online;
     }
 }
 </script>
