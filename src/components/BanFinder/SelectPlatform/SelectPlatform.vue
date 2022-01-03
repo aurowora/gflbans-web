@@ -1,3 +1,8 @@
+<!--
+  This file is part of GFLBans Web and is licensed under the terms of the third version (only) of the GNU General Public License.
+  See README.md and LICENSE.txt for more information.
+-->
+
 <template>
     <p>Select the platform that you were banned from. This won't necessarily be the game you were banned from.</p>
     <ul>

@@ -1,3 +1,8 @@
+<!--
+  This file is part of GFLBans Web and is licensed under the terms of the third version (only) of the GNU General Public License.
+  See README.md and LICENSE.txt for more information.
+-->
+
 <template>
     <ul class="steps has-content-centered">
         <li class="steps-segment" :class="[step > 0 ? $store.getters.isThemeClass : 'is-white']">
