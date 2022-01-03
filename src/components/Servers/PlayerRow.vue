@@ -7,7 +7,7 @@
     <div class="list-item">
         <div class="list-item-image">
             <figure class="image is-64x64">
-                <img v-if="player.avatar" class="is-rounded" :src="`${INST}file/uploads/${player.avatar.file_id}/avatar.webp`" />
+                <img v-if="player.gs_avatar" class="is-rounded" :src="`${INST}file/uploads/${player.gs_avatar.file_id}/avatar.webp`" />
                 <!--TODO: Default avatar image -->
                 <img v-else class="is-rounded" src="@/assets/pinwheel.webp" />
             </figure>
