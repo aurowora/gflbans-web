@@ -28,7 +28,7 @@ SUPPORTED_MODS.set('rust', joinSteamServer);
 
 function openServer(game: string, ip: string, game_port: string): null | ArgumentError
 {
-    let opener = SUPPORTED_MODS.get(game);
+    const opener = SUPPORTED_MODS.get(game);
 
     if (!opener && !DEFAULT_JOIN_HANDLER)
     {
@@ -50,7 +50,7 @@ function openServer(game: string, ip: string, game_port: string): null | Argumen
 
 function isGameSupported(game: string)
 {
-    return SUPPORTED_MODS.has(game) || DEFAULT_JOIN_HANDLER;
+    return SUPPORTED_MODS.has(game) || DEFAULT_JOIN_HANDLER !== undefined;
 }
 
 export { isGameSupported, openServer, Opener };

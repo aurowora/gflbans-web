@@ -9,6 +9,7 @@
             <img v-if="!imageErr" :src="`${INST}maps/${game}/${map}`" @error="mapImageFailed"/>
             <img v-else src="@/assets/unknown_map.webp" />
             <p>{{ map }}</p>
+            <button v-if="canJoinServer" @click="joinServer" class="button joinBtn" :class="[$store.getters.isThemeClass]">Connect</button>
         </div>
         <div class="column" v-if="loaded">
             <h1 class="is-size-5 has-text-white">Players ({{players.length}})</h1>
@@ -28,6 +29,7 @@
 import { INSTANCE } from "@/config";
 import { EncodingError, GFLBansError, HTTPError, NetworkError } from "@/errors";
 import { getPlayers, IPlayer, IServer } from "@/gflbans/servers";
+import { isGameSupported, openServer } from "@/join";
 import { Options, Vue } from "vue-class-component";
 import PlayerRow from './PlayerRow.vue';
 
@@ -73,6 +75,11 @@ export default class ServerInterior extends Vue {
         return this.server.map ? this.server.map : ''
     }
 
+    get canJoinServer()
+    {
+        return isGameSupported(this.game);
+    }
+
     // Called by the parent component to begin loading when it is opened (so we don't spam the server with useless requests)
     // (Fetches the player list)
     activate()
@@ -110,6 +117,11 @@ export default class ServerInterior extends Vue {
     {
         this.imageErr = true;
     }
+
+    joinServer()
+    {
+        openServer(this.game, this.server.ip, this.server.game_port);
+    }
 }
 </script>
 
@@ -135,5 +147,9 @@ h1 {
 
 .loader {
     margin-bottom: 5px;
+}
+
+.joinBtn {
+    margin-top: 15px;
 }
 </style>
