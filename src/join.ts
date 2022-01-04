@@ -10,7 +10,7 @@ import { ArgumentError } from "./errors";
 
 function joinSteamServer(server_ip: string, game_port: string)
 {
-    window.open(`steam://connect/${server_ip}:${game_port}`);
+    window.open(`steam://connect/${server_ip}:${game_port}`, '_self');
 }
 
 /* Wrap all of this into a nice interface for other parts of the program */
