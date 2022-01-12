@@ -74,3 +74,11 @@ export const COMMUNITY_NAME = "GFLClan";
   ex: to use steam connect links for anything not explicitly supported: export const DEFAULT_JOIN_HANDLER = joinSteamServer
 */
 export const DEFAULT_JOIN_HANDLER: Opener | null = null;
+
+/*
+  Number of infractions to show per page
+
+  Must not exceed 50
+*/
+
+export const MAX_INFRACTIONS_PER_PAGE: number = 30;

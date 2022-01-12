@@ -9,7 +9,14 @@
             <img v-if="!imageErr" :src="`${INST}maps/${game}/${map}`" @error="mapImageFailed"/>
             <img v-else src="@/assets/unknown_map.webp" />
             <p>{{ map }}</p>
-            <button v-if="canJoinServer" @click="joinServer" class="button joinBtn" :class="[$store.getters.isThemeClass]">Connect</button>
+            <div class="field is-grouped">
+                <p class="control">
+                    <button v-if="canJoinServer" @click="joinServer" class="button is-small" :class="[$store.getters.isThemeClass]">Connect</button>
+                </p>
+                <p class="control">
+                    <router-link :to="`/infractions?mode=${serverMode}&argument=${server.id}`" class="button is-small" :class="[$store.getters.isThemeClass]">View Infractions</router-link>
+                </p>
+            </div>
         </div>
         <div class="column" v-if="loaded">
             <h1 class="is-size-5 has-text-white">Players ({{players.length}})</h1>
@@ -29,6 +36,7 @@
 import { INSTANCE } from "@/config";
 import { EncodingError, GFLBansError, HTTPError, NetworkError } from "@/errors";
 import { getPlayers, IPlayer, IServer } from "@/gflbans/servers";
+import { InfractionModes } from "@/globals";
 import { isGameSupported, openServer } from "@/join";
 import { Options, Vue } from "vue-class-component";
 import PlayerRow from './PlayerRow.vue';
@@ -63,6 +71,7 @@ export default class ServerInterior extends Vue {
 
     // template globals
     INST = INSTANCE;
+    serverMode = InfractionModes.VIEW_SERVER
 
     // getters
     get game()
@@ -149,7 +158,8 @@ h1 {
     margin-bottom: 5px;
 }
 
-.joinBtn {
-    margin-top: 15px;
+.field {
+    margin-top: 30px;
 }
+
 </style>

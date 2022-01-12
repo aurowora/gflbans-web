@@ -41,4 +41,14 @@ async function get_csrf_token(): Promise<string | NetworkError | EncodingError |
     return csrf_token;
 }
 
-export {slash_fix, sleep, get_csrf_token};
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+// necessary because we use int parsibility to tell between mongo admin ids and ips admin ids in some parts
+function strictParseInt(value: string) {
+    if (/^[-+]?(\d+|Infinity)$/.test(value)) {
+      return Number(value)
+    } else {
+      return NaN
+    }
+}
+
+export {slash_fix, sleep, get_csrf_token, strictParseInt};

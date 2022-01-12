@@ -4,17 +4,17 @@
 -->
 
 <template>
-    <div class="serverMain container" v-if="hasServers">
+    <div class="pageBase container" v-if="hasServers">
         <div class="section">
           <h1 class="title has-text-white">Servers</h1>
           <Server v-for="server in servers" :key="server.id" :server="server"></Server>
         </div>
         
     </div>
-    <div v-else class="serverMain is-flex is-justify-content-center is-align-items-center">
-      <div class="loader-wrapper">
-        <span class="loader"></span>
-        <span class="loaderText">Loading server list…</span>
+    <div v-else class="pageBase is-flex is-justify-content-center is-align-items-center">
+      <div class="pb-loader-wrapper">
+        <span class="pb-loader loader"></span>
+        <span class="pb-loaderText">Loading server list…</span>
       </div>
     </div>
 </template>
@@ -22,6 +22,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Server from './Server.vue';
+import '@/assets/css/pageBase.scss'
 
 @Options({
   components: {
@@ -41,26 +42,3 @@ export default class Servers extends Vue {
   }
 }
 </script>
-
-<style scoped>
-  .serverMain.container {
-    width: 100%;
-  }
-
-  .serverMain {
-    font-family: 'Montserrat-Regular', sans-serif;
-  }
-
-  .loader {
-    width: 64px;
-    height: 64px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 10px;
-  }
-
-  .loader-wrapper {
-    text-align: center;
-  }
-
-</style>

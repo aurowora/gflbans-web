@@ -19,7 +19,7 @@ export default class UserButton extends Vue {
     if (this.$store.state.current_user && this.$store.state.current_user.avatar_id) {
       return `${INSTANCE}file/uploads/${this.$store.state.current_user.avatar_id}/avatar.webp`;
     } else {
-      return "@/assets/pinwheel.webp";
+      return "@/assets/animated/pinwheel.webp";
     }
   }
 

@@ -51,4 +51,13 @@ GAMES.set('garrysmod', 'garrysmod.svg');
 GAMES.set('cstrike', 'css.webp');
 GAMES.set('csgo', 'csgo.webp');
 
-export { Permission, adminPermissions, COLORS, GAMES };
+enum InfractionModes {
+  NORMAL,
+  VIEW_SERVER,
+  VIEW_ADMIN,
+  VIEW_PLAYER,
+  SEARCH,
+  ERROR
+}
+
+export { Permission, adminPermissions, COLORS, GAMES, InfractionModes };

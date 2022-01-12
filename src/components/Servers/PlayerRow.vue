@@ -9,7 +9,7 @@
             <figure class="image is-64x64">
                 <img v-if="player.gs_avatar" class="is-rounded" :src="`${INST}file/uploads/${player.gs_avatar.file_id}/avatar.webp`" />
                 <!--TODO: Default avatar image -->
-                <img v-else class="is-rounded" src="@/assets/pinwheel.webp" />
+                <img v-else class="is-rounded" src="@/assets/animated/pinwheel.webp" />
             </figure>
         </div>
 

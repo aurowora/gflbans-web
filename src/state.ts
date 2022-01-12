@@ -91,6 +91,10 @@ const store = createStore<State>({
         setServers(state, servers: IServer[])
         {
             state.servers = servers;
+        },
+        setNavLoader(state, loader_contents: ILoaderInfo)
+        {
+            state.small_loading = loader_contents;
         }
     }
 });

@@ -4,7 +4,7 @@
 -->
 
 <template>
-  <div v-if="isLoading" class="modal is-active">
+  <div v-if="this.$store.state.loading" class="modal is-active">
     <div class="modal-background"></div>
     <div class="sk-cube-grid">
       <div class="sk-cube sk-cube1">
@@ -37,7 +37,7 @@
     </div>
     <p id="loadMessage">
       Loading...
-      <img class="loader-emote" src="@/assets/pinwheel.webp" alt=":pinwheel:" />
+      <img class="loader-emote" src="@/assets/animated/pinwheel.webp" alt=":pinwheel:" />
     </p>
   </div>
 </template>
@@ -45,12 +45,7 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 
-export default class Loading extends Vue {
-  get isLoading() 
-  {
-    return this.$store.state.loading;
-  }
-}
+export default class Loading extends Vue {}
 </script>
 
 <style scoped>

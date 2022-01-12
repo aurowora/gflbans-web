@@ -1,0 +1,23 @@
+/*
+    Used on many of the main pages
+*/
+
+.pageBase.container {
+    width: 100%;
+}
+
+.pageBase {
+    font-family: 'Montserrat-Regular', sans-serif;
+}
+
+.pb-loader {
+    width: 64px;
+    height: 64px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
+
+.pb-loader-wrapper {
+    text-align: center;
+}

@@ -8,6 +8,7 @@ import { EncodingError, HTTPError, NetworkError } from "@/errors";
 import { State } from "@/state";
 import { Store } from "vuex";
 import { sleep } from "./utils";
+import { IFileInfo } from "./common";
 
 // Responsible for fetching (and keeping up to date) the Servers in the Vuex store, which are used by the Servers page
 class ServerManager
@@ -117,12 +118,6 @@ interface IPlayer
     playtime: number;
 }
 
-// File info with only the bits we care about
-interface IFileInfo
-{
-    file_id: string;
-}
-
 // Fetches the player list
 async function getPlayers(server_id: string): Promise<NetworkError | HTTPError | EncodingError | IPlayer[]>
 {
@@ -152,4 +147,4 @@ async function getPlayers(server_id: string): Promise<NetworkError | HTTPError |
     }
 }
 
-export { IServer, ServerManager, startServerManager, getPlayers, IPlayer, IFileInfo }
+export { IServer, ServerManager, startServerManager, getPlayers, IPlayer }
