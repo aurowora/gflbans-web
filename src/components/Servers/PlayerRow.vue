@@ -50,7 +50,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { INSTANCE } from "@/config";
 import { kick_player } from "@/gflbans/rpc";
-import { GFLBansError, HTTPError, NetworkError } from "@/errors";
+import { GFLBansError, HTTPError, NetworkError, setError } from "@/errors";
 
 dayjs.extend(relativeTime);
 
@@ -105,10 +105,10 @@ export default class Player extends Vue {
         kick_player(this.server.id, this.player.gs_service, this.player.gs_id).then(function (result) {
             if (result instanceof HTTPError || result instanceof NetworkError)
             {
-                pr.$store.commit('setError', result);
+                setError(result);
             }
         }).catch(function (exc) {
-            pr.$store.commit('setError', new GFLBansError(exc));
+            setError(new GFLBansError(exc));
         }).finally(function () {
             pr.loadingKick = false;
         })

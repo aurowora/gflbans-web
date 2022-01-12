@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { EncodingError, GFLBansError, HTTPError, NetworkError } from "@/errors";
+import { EncodingError, GFLBansError, HTTPError, NetworkError, setError } from "@/errors";
 import { check_login, fetch_login_data, log_out } from "@/gflbans/login";
 import { Vue } from "vue-class-component";
 
@@ -44,7 +44,7 @@ export default class LogInOutButton extends Vue {
       li instanceof EncodingError ||
       li instanceof NetworkError
     ) {
-      this.$store.commit("setError", li);
+      setError(li);
       return;
     } else {
       // Login Data
@@ -58,12 +58,10 @@ export default class LogInOutButton extends Vue {
   }
 
   beginLogin() {
-    let thisRed = this;
-
     console.log("Begin login process");
 
     this.getLoginInfo().catch(function (e) {
-      thisRed.$store.commit("setError", new GFLBansError(e));
+      setError(new GFLBansError(e));
     });
   }
 
@@ -75,7 +73,7 @@ export default class LogInOutButton extends Vue {
       log_out().then(function (r) {
           if (r instanceof HTTPError || r instanceof NetworkError)
           {
-              store.commit('setError', r);
+              setError(r);
               return;
           }
 
@@ -87,7 +85,7 @@ export default class LogInOutButton extends Vue {
             });
           }
       }).catch(function (e) {
-          store.commit('setError', new GFLBansError(e));
+          setError(new GFLBansError(e));
       }).finally(function () {
           store.commit('setLoading', false);
           check_login(store);

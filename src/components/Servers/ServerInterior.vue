@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import { INSTANCE } from "@/config";
-import { EncodingError, GFLBansError, HTTPError, NetworkError } from "@/errors";
+import { EncodingError, GFLBansError, HTTPError, NetworkError, setError } from "@/errors";
 import { getPlayers, IPlayer, IServer } from "@/gflbans/servers";
 import { InfractionModes } from "@/globals";
 import { isGameSupported, openServer } from "@/join";
@@ -111,14 +111,14 @@ export default class ServerInterior extends Vue {
         getPlayers(this.server.id).then(function (result) {
             if (result instanceof NetworkError || result instanceof EncodingError || result instanceof HTTPError)
             {
-                t.$store.commit('setError', result);
+                setError(result);
             } else {
                 console.log('Got player list', result);
                 t.players = result;
                 t.loaded = true;
             }
         }).catch(function (e) {
-            t.$store.commit('setError', new GFLBansError(e));
+            setError(new GFLBansError(e));
         })
     }
 

@@ -14,7 +14,6 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import TopBar from '@/components/Global/TopBar.vue';
-import Error from '@/components/Global/Error.vue'
 import Loading from '@/components/Global/Loading.vue';
 import { check_login } from './gflbans/login';
 import { startServerManager } from './gflbans/servers';
@@ -23,7 +22,6 @@ import LoadingSmall from './components/Global/LoadingSmall.vue';
 @Options({
   components: {
     TopBar,
-    Error,
     Loading,
     LoadingSmall
   },

@@ -32,6 +32,7 @@ import {
   GFLBansError,
   HTTPError,
   NetworkError,
+  setError,
 } from "@/errors";
 import { sleep, strictParseInt } from "@/gflbans/utils";
 import { get_admin_info } from "@/gflbans/admins";
@@ -149,14 +150,7 @@ function handleRouteUpdate(
   // simple error handler
   function error(err: GFLBansError)
   {
-    if (tr)
-    {
-      // reuse orig
-      tr.setError(err);
-      next();
-    } else {
-      next(vm => (vm as Infractions).setError(err));
-    }
+    setError(err);
   
     // we failed, so remove the loader
     globalStore.commit("setNavLoader", {
@@ -183,11 +177,10 @@ function handleRouteUpdate(
 
     prom.push(get_infractions(page, query[0], null, query[1]));
     prom.push(resolveArgument(mode, argument));
-  } else if (mode == InfractionModes.ERROR)
-  {
-    return error(new GFLBansError(argument)) // maybe testing an error cond? weirdo
-  } else {
+  } else if (mode == InfractionModes.NORMAL) {
     prom.push(get_infractions(page, null, null, true));
+  } else {
+    return error(new ArgumentError(`Invalid infraction loader mode ${mode}`))
   }
 
   Promise.all(prom).then(vals => {
@@ -256,20 +249,15 @@ function handleRouteUpdate(
   },
 })
 export default class Infractions extends Vue {
-  mode: number = 5;
+  mode: number = 0;
   orig_arg: string = '';
-  argument: string = "If you're seeing this error message, it's probably because you're using auto-reload in dev environment. This kinda breaks here, so just refresh the page.";
+  argument: string = "";
   page: number = 1;
   total_infractions: number = 0;
   infractions: IInfraction[] | null = null;
 
   // template globals
   perPage = MAX_INFRACTIONS_PER_PAGE;
-
-  setError(err: GFLBansError)
-  {
-    this.setData(5, '', err.formatted, 1, 0, null);
-  }
 
   setData(mode: number, orig_arg: string, resolved: string, page_ov: number | null, total: number, infractions: IInfraction[] | null)
   {
@@ -305,8 +293,7 @@ export default class Infractions extends Vue {
         return "Search";
       }
       default: {
-        this.$store.commit(
-          "setError",
+        setError(
           new ArgumentError(
             `Selected mode ${this.mode} is not supported. Bad link or query param manipulation.`
           )

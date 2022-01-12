@@ -3,6 +3,8 @@
   See README.md and LICENSE.txt for more information.
 */
 
+import router from "./routes";
+
 interface IGFLBansError
 {
     code: string;
@@ -98,5 +100,20 @@ class ConfigError extends GFLBansError
     }
 }
 
-export { HTTPError, NetworkError, GFLBansError, EncodingError, StateError, ArgumentError, SecurityError, ConfigError };
+function setError(err: GFLBansError)
+{
+    console.log('GFLBans Error', err);
+    console.trace();
+
+    router.replace({
+        path: '/error',
+        query: {
+            'error_detail': err.formatted
+        }
+    }).catch(function (e) {
+        console.log(e)
+    })
+}
+
+export { HTTPError, NetworkError, GFLBansError, EncodingError, StateError, ArgumentError, SecurityError, ConfigError, setError };
 export type { IGFLBansError };

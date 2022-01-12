@@ -3,7 +3,7 @@
   See README.md and LICENSE.txt for more information.
 */
 
-import { HTTPError, NetworkError, EncodingError, StateError, SecurityError, GFLBansError } from '@/errors';
+import { HTTPError, NetworkError, EncodingError, StateError, SecurityError, GFLBansError, setError } from '@/errors';
 import { INSTANCE, PRODUCTION, PUBLIC_URI } from '@/config';
 import { slash_fix } from '@/gflbans/utils';
 import { v4 as uuidv4 } from 'uuid';
@@ -236,12 +236,12 @@ function check_login(store: Store<State>) {
     if (r instanceof HTTPError && r.http_code === 401) {
       console.log('not logged in: OK')
     } else if (r instanceof NetworkError || r instanceof EncodingError) {
-      store.commit('setError', r);
+      setError(r);
     } else { // CurrentUserInfo
       store.commit('setUser', r);
     }
   }).catch(function (e) {
-    store.commit('setError', new GFLBansError(e));
+    setError(new GFLBansError(e));
   }).finally(function () {
     store.commit('setLoading', false);
   });

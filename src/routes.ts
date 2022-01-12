@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteLocation } from 'vue-router';
-import { ArgumentError, GFLBansError, HTTPError, NetworkError, SecurityError, StateError } from './errors';
+import { ArgumentError, GFLBansError, HTTPError, NetworkError, SecurityError, setError, StateError } from './errors';
 import { finish_login } from './gflbans/login';
 import { adminPermissions } from './globals';
 import { store } from './state';
@@ -11,9 +11,11 @@ const Management = () => import('@/components/TopLevel/Management.vue');
 const Servers = () => import('@/components/Servers/Servers.vue');
 //const BanFinder = () => import('@/components/BanFinder/BanFinder.vue');
 const GQLDoc = () => import('@/components/GQLDoc/GQLDoc.vue');
+const ErrorPage = () => import('@/components/Global/ErrorPage.vue');
 
 const routes = [
   { path: '/', component: Home, alias: '/home' },
+  { path: '/error', component: ErrorPage },
   { path: '/servers', component: Servers },
   { path: '/infractions', component: Infractions, props: (route: any) => ({ mode: route.query.mode ? parseInt(route.query.mode) : 0, argument: route.query.argument ? route.query.argument : ''  }) },
   { path: '/gql-doc', component: GQLDoc },
@@ -39,8 +41,6 @@ const routes = [
       /* Read the arguments from the query string */
       if (to.query.code == undefined || to.query.state == undefined )
       {
-        store.commit('setError', new ArgumentError('Missing required arguments for this route (state, code).'));
-        store.commit('setLoading', false);
         return '/home';
       }
 
@@ -51,12 +51,12 @@ const routes = [
       finish_login(store, code, state).then(function (result) {
         if (result instanceof HTTPError || result instanceof NetworkError || result instanceof StateError || result instanceof SecurityError)
         {
-          store.commit('setError', result);
+          setError(result);
           return;
         }
         console.log('Login succeeded :)');
       }).catch(function (e) {
-        store.commit('setError', new GFLBansError(e));
+        setError(new GFLBansError(e));
       }).finally(function () {
         store.commit('setLoading', false);
 
@@ -75,7 +75,11 @@ const routes = [
 
       return '/home';
     }
-  }
+  },
+  // not found route
+  { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage, meta: {
+      'error_detail': 'The requested path does not exist.'
+  } },
 ];
 
 const router = createRouter({

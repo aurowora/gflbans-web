@@ -14,7 +14,6 @@ import { ILoaderInfo } from './loading';
 // Changes to this need to be applied to vuex.d.ts
 interface State {
     current_user?: CurrentUserInfo;
-    current_error?: GFLBansError;
     loading: boolean;
     theme_color: number;
     servers?: IServer[];
@@ -26,7 +25,6 @@ const colorAtLoad = localStorage.getItem('gflbans_color');
 const key: InjectionKey<Store<State>> = Symbol();
 const store = createStore<State>({
     state: {
-        current_error: undefined,
         current_user: undefined,
         loading: false,
         theme_color: colorAtLoad ? parseInt(colorAtLoad) : 0,
@@ -71,10 +69,6 @@ const store = createStore<State>({
         }
     },
     mutations: {
-        setError(state, err: GFLBansError)
-        {
-            state.current_error = err;
-        },
         setLoading(state, is_loading: boolean)
         {
             state.loading = is_loading;

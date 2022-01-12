@@ -56,8 +56,7 @@ enum InfractionModes {
   VIEW_SERVER,
   VIEW_ADMIN,
   VIEW_PLAYER,
-  SEARCH,
-  ERROR
+  SEARCH
 }
 
 export { Permission, adminPermissions, COLORS, GAMES, InfractionModes };
