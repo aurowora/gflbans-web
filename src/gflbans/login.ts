@@ -236,6 +236,7 @@ function check_login(store: Store<State>) {
     if (r instanceof HTTPError && r.http_code === 401) {
       console.log('not logged in: OK')
     } else if (r instanceof NetworkError || r instanceof EncodingError) {
+      console.log('here!')
       setError(r);
     } else { // CurrentUserInfo
       store.commit('setUser', r);

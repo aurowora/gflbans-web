@@ -1,14 +1,18 @@
 <template>
     <nav class="pagination" role="navigation" aria-label="pagination">
-        <a class="pagination-previous">
-
+        
+        <!-- This will serve as the refresh button -->
+        <a class="pagination-previous has-background-grey-darker" @click="goto(current_page)">
+            <span class="icon">
+                <font-awesome-icon icon="arrows-rotate"></font-awesome-icon>
+            </span>
         </a>
-        <a class="pagination-next">
-            
+        <a class="pagination-next" :class="[$store.getters.hasBackgroundThemeClass]" v-if="canSeeInfractCreate">
+            <font-awesome-icon icon="gavel"></font-awesome-icon>
         </a>
         <ul class="pagination-list">
             <li v-if="backVisible">
-                <a @click="back()" class="pagination-link">
+                <a @click="back()" class="pagination-link has-background-grey-darker">
                     <span class="icon">
                         <font-awesome-icon icon="arrow-left"></font-awesome-icon>
                     </span>
@@ -16,23 +20,23 @@
             </li>
 
             <!-- 1 is valid always? -->
-            <li><a @click="goto(1)" class="pagination-link" :class="{'is-current': current_page == 1}" aria-label="Goto page 1">1</a></li>
+            <li><a @click="goto(1)" class="pagination-link" :class="current_page === 1 ? ['is-current', $store.getters.hasBackgroundThemeClass] : ['has-background-grey-darker']" aria-label="Goto page 1">1</a></li>
 
             <!-- If 1 isn't the third back, we need to draw ... -->
 
             <li v-if="current_page - 3 > 1"><span class="pagination-ellipsis">&hellip;</span></li>
 
             <template v-for="idx in seq" :key=idx>
-                <li><a @click="goto(idx)" class="pagination-link" :class="{'is-current': current_page == idx}" :aria-label="`Goto page ${idx}`">{{ idx }}</a></li>
+                <li><a @click="goto(idx)" class="pagination-link" :class="current_page === idx ? ['is-current', $store.getters.hasBackgroundThemeClass] : ['has-background-grey-darker']" :aria-label="`Goto page ${idx}`">{{ idx }}</a></li>
             </template>
 
             <!-- If the end isnt within 3 pages, we also need ... -->
             <li v-if="current_page + 3 < total_pages"><span class="pagination-ellipsis">&hellip;</span></li>
 
-            <li><a @click="goto(total_pages)" class="pagination-link" :class="{'is-current': current_page == total_pages}" :aria-label="`Goto page ${total_pages}`">{{ total_pages }}</a></li>
+            <li><a @click="goto(total_pages)" class="pagination-link" :class="current_page == total_pages ? ['is-current', $store.getters.hasBackgroundThemeClass] : ['has-background-grey-darker']" :aria-label="`Goto page ${total_pages}`">{{ total_pages }}</a></li>
 
             <li v-if="nextVisible">
-                <a @click="next()" class="pagination-link">
+                <a @click="next()" class="pagination-link has-background-grey-darker">
                     <span class="icon">
                         <font-awesome-icon icon="arrow-right"></font-awesome-icon>
                     </span>
@@ -43,6 +47,7 @@
 </template>
 
 <script lang="ts">
+import { Permission } from '@/globals';
 import { Options, Vue } from 'vue-class-component';
 
 @Options({
@@ -56,7 +61,7 @@ import { Options, Vue } from 'vue-class-component';
             required: true
         }
     },
-    emits: ['goto']
+    emits: ['goto', 'openCreateInf']
 })
 export default class Pagination extends Vue {
     current_page!: number;
@@ -79,6 +84,11 @@ export default class Pagination extends Vue {
             this.goto(this.current_page + 1);
     }
 
+    createInf()
+    {
+        this.$emit('openCreateInf');
+    }
+
     get backVisible()
     {
         return this.current_page > 1
@@ -87,6 +97,11 @@ export default class Pagination extends Vue {
     get nextVisible()
     {
         return this.current_page < this.total_pages
+    }
+
+    get canSeeInfractCreate()
+    {
+        return this.$store.state.current_user ? (this.$store.state.current_user.permissions & Permission.CREATE_INFRACTION) === Permission.CREATE_INFRACTION : false;
     }
 
     // get the 5 indexes to provide links to (unless they are the first or last pages)
@@ -106,3 +121,9 @@ export default class Pagination extends Vue {
     }
 }
 </script>
+
+<style lang="sass" scoped>
+.pagination-link, .pagination-next, .pagination-previous
+    color: white
+
+</style>

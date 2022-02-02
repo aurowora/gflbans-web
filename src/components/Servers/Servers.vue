@@ -9,7 +9,6 @@
           <h1 class="title has-text-white">Servers</h1>
           <Server v-for="server in servers" :key="server.id" :server="server"></Server>
         </div>
-        
     </div>
     <div v-else class="pageBase is-flex is-justify-content-center is-align-items-center">
       <div class="pb-loader-wrapper">

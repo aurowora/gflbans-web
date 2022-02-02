@@ -6,7 +6,6 @@
 <template>
   <TopBar></TopBar>
   <router-view class="is-flex-grow-1"></router-view>
-  <Error></Error>
   <Loading></Loading>
   <LoadingSmall></LoadingSmall>
 </template>

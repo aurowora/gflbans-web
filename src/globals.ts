@@ -59,4 +59,22 @@ enum InfractionModes {
   SEARCH
 }
 
-export { Permission, adminPermissions, COLORS, GAMES, InfractionModes };
+enum InfractionFlags {
+  SYSTEM = 1 << 0,
+  GLOBAL = 1 << 1,
+  COMMUNITY = 1 << 2,
+  PERMANENT = 1 << 3,
+  VPN = 1 << 4,
+  WEB = 1 << 5,
+  REMOVED = 1 << 6,
+  VOICE_BLOCK = 1 << 7,
+  CHAT_BLOCK = 1 << 8,
+  BAN = 1 << 9,
+  ADMIN_CHAT_BLOCK = 1 << 10,
+  CALL_ADMIN_BAN = 1 << 11,
+  SESSION = 1 << 12,
+  DEC_ONLINE_ONLY = 1 << 13,
+  AUTO_TIER = 1 << 16,
+}
+
+export { Permission, adminPermissions, COLORS, GAMES, InfractionModes, InfractionFlags };

@@ -61,21 +61,24 @@ interface IInfraction {
     last_heartbeat?: number;
 }
 
-async function get_infractions(page: number, query: string | null = null, find_infraction: string | null = null, strict_xql = false): Promise<EncodingError | NetworkError | HTTPError | ArgumentError | IGetInfractionsResult>
+async function get_infractions(page: number, query: string | null = null, find_infraction: string | null = null, strict_xql = false, head_only = false): Promise<EncodingError | NetworkError | HTTPError | ArgumentError | IGetInfractionsResult>
 {
     let responseText = "";
 
   try {
-    const response = await fetch(`${INSTANCE}api/v1/infractions${query !== null ? "/search?xql_string=" + encodeURIComponent(query) + `&strict_xql=${strict_xql}&` : "/?"}limit=${MAX_INFRACTIONS_PER_PAGE}&skip=${(page - 1) * MAX_INFRACTIONS_PER_PAGE}${find_infraction ? "&find=" + encodeURIComponent(find_infraction) : ''}`, {
+    const response = await fetch(`${INSTANCE}api/v1/infractions${query !== null ? "/search?xql_string=" + encodeURIComponent(query) + `&strict_xql=${strict_xql}&` : "/?"}limit=${MAX_INFRACTIONS_PER_PAGE}&skip=${(page - 1) * MAX_INFRACTIONS_PER_PAGE}&load_fast=false${find_infraction ? "&locate=" + encodeURIComponent(find_infraction) : ''}`, {
       mode: PRODUCTION ? 'same-origin' : 'cors',
-      credentials: PRODUCTION ? 'same-origin' : 'include'
+      credentials: PRODUCTION ? 'same-origin' : 'include',
+      method: head_only ? 'HEAD' : 'GET'
     });
 
     if (!response.ok) {
-      return new HTTPError(response.status, await response.text());
+      return new HTTPError(response.status, head_only ? 'NO BODY' : await response.text());
     }
 
-    responseText = await response.text();
+    if (!head_only) {
+      responseText = await response.text();
+    }
 
     let i_located_index = null;
     if (find_infraction)
@@ -83,6 +86,19 @@ async function get_infractions(page: number, query: string | null = null, find_i
         const idx = response.headers.get('X-Located-Index');
         const p_idx = idx ? parseInt(idx) : null;
         i_located_index = p_idx && !isNaN(p_idx) ? p_idx : null;
+
+        if (!i_located_index)
+        {
+          return new NetworkError('Sent locate query param, but didn\'t receive expected X-Located-Index header (misconfigured CORS?)');
+        }
+
+        if (head_only) {
+          return {
+            infractions: [],
+            total_results: 0,
+            located_index: i_located_index
+          }
+        }
     }
 
     const rpl = JSON.parse(responseText) as GetReply

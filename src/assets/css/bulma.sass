@@ -1,0 +1,43 @@
+@charset "utf-8"
+
+@import "~bulma/sass/utilities/initial-variables.sass"
+
+// Change the blue used throughout to the GFL Blue
+$blue: #0B5FB5
+
+// override table colors
+$table-head-background-color: hsl(0, 0%, 17%)
+$table-background-color: hsl(0, 0%, 21%)
+$table-color: hsl(0, 0%, 100%)
+//$table-cell-border: none
+$table-head-cell-border-width: 0
+$table-striped-row-even-background-color: hsl(0, 0%, 26%)
+$table-row-hover-background-color: hsl(0, 0%, 26%)
+$table-striped-row-even-hover-background-color: hsl(0, 0%, 31%)
+//$table-cell-heading-color: hsl(0, 0, 100%)
+
+@import "~bulma/bulma.sass"
+
+// Make it so the pagination buttons go darker on hover
+.pagination-link, .pagination-next, .pagination-previous
+    @each $name, $pair in $colors
+        $color: nth($pair, 1)
+        &.has-background-#{$name}
+            border: none
+            transition: 0.3s
+            &.is-hovered,
+            &:hover
+                background-color: bulmaDarken($color, 2.5%) !important
+    @each $name, $shade in $shades
+        &.has-background-#{$name}
+            border: none
+            transition: 0.3s
+            &.is-hovered,
+            &:hover
+                background-color: bulmaDarken($shade, 2.5%) !important
+
+// @import "@/vendor/bulma-o-steps/steps.sass"
+// @import "~@creativebulma/bulma-collapsible"
+@import "~@creativebulma/bulma-tooltip/src/sass/index.sass"
+@import "~bulma-list/sass/bulma-list.sass"
+

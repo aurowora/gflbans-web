@@ -25,11 +25,14 @@ const colorAtLoad = localStorage.getItem('gflbans_color');
 const key: InjectionKey<Store<State>> = Symbol();
 const store = createStore<State>({
     state: {
+        // app state
         current_user: undefined,
         loading: false,
-        theme_color: colorAtLoad ? parseInt(colorAtLoad) : 0,
         servers: undefined,
-        small_loading: {is_loading: false, loader_text: 'Loading…'}
+        small_loading: {is_loading: false, loader_text: 'Loading…'},
+
+        // global user conf
+        theme_color: colorAtLoad ? parseInt(colorAtLoad) : 0,
     },
     getters: {
         isAdmin(state)
@@ -65,6 +68,17 @@ const store = createStore<State>({
                 return 'has-text-link'
             } else {
                 return `has-text-${COLORS[themeIdx]}`
+            }
+        },
+        hasBackgroundThemeClass(state)
+        {
+            const themeIdx = state.theme_color;
+
+            if (themeIdx > COLORS.length - 1)
+            {
+                return 'has-background-link'
+            } else {
+                return `has-background-${COLORS[themeIdx]}`
             }
         }
     },

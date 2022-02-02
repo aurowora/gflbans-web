@@ -4,10 +4,12 @@
 -->
 
 <template>
-    <div class="columns">
+    <div class="columns transition-wrapper">
         <div class="column is-one-third is-hidden-mobile is-flex is-flex-direction-column is-align-items-center">
-            <img v-if="!imageErr" :src="`${INST}maps/${game}/${map}`" @error="mapImageFailed"/>
-            <img v-else src="@/assets/unknown_map.webp" />
+            <figure class="image">
+                <img v-if="!imageErr" :src="`${INST}maps/${game}/${map}`" @error="mapImageFailed">
+                <img v-else src="@/assets/unknown_map.webp">
+            </figure>
             <p>{{ map }}</p>
             <div class="field is-grouped">
                 <p class="control">
@@ -18,17 +20,19 @@
                 </p>
             </div>
         </div>
-        <div class="column" v-if="loaded">
-            <h1 class="is-size-5 has-text-white">Players ({{players.length}})</h1>
-            <div class="list has-overflow-ellipsis" v-if="players.length > 0">
-                <PlayerRow v-for="player in players" :key="player.gs_id" :player="player" :server="server"></PlayerRow>
-            </div>
-            <p class="has-text-white is-faded is-size-6" v-else>No players are connected.</p>
-        </div>
-        <div class="column is-flex is-flex-direction-column is-align-items-center is-justify-content-center" v-else>
-            <span class="loader"></span>
-            <span>Loading player list…</span>
-        </div>
+            <transition name="serverPlayerListAnim" mode="out-in" enter-active-class="animated fadeIn faster" leave-active-class="animated fadeOut faster">
+                <div key=1 class="column" v-if="loaded">
+                    <h1 class="is-size-5 has-text-white">Players ({{players.length}})</h1>
+                    <div class="list has-overflow-ellipsis" v-if="players.length > 0">
+                        <PlayerRow v-for="player in players" :key="player.gs_id" :player="player" :server="server"></PlayerRow>
+                    </div>
+                    <p class="has-text-white is-faded is-size-6" v-else>No players are connected.</p>
+                </div>
+                <div key=2 class="column is-flex is-flex-direction-column is-align-items-center is-justify-content-center" v-else>
+                    <span class="loader"></span>
+                    <span>Loading player list…</span>
+                </div>
+            </transition>
     </div>
 </template>
 
@@ -55,7 +59,7 @@ import PlayerRow from './PlayerRow.vue';
         }
     },
     components: {
-        PlayerRow
+        PlayerRow,
     }
 })
 
@@ -135,7 +139,7 @@ export default class ServerInterior extends Vue {
 </script>
 
 <style scoped>
-img {
+.image {
     max-height: 120px;
     max-width: 160px;
     width: 90%;
@@ -162,4 +166,7 @@ h1 {
     margin-top: 30px;
 }
 
+.transition-wrapper {
+    overflow: hidden;
+}
 </style>

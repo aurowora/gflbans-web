@@ -5,13 +5,7 @@
 
 import router from "./routes";
 
-interface IGFLBansError
-{
-    code: string;
-    detail: any;
-}
-
-class GFLBansError implements IGFLBansError
+class GFLBansError
 {
     code: string;
     detail: any;
@@ -116,4 +110,3 @@ function setError(err: GFLBansError)
 }
 
 export { HTTPError, NetworkError, GFLBansError, EncodingError, StateError, ArgumentError, SecurityError, ConfigError, setError };
-export type { IGFLBansError };

@@ -38,9 +38,14 @@
                 <span>Offline</span>
             </template>
         </div>
-        <div v-if="open && openable" class="message-body has-text-white">
-            <ServerInterior ref="interior" :server="server"></ServerInterior>
+        <div class="transition-wrapper">
+            <transition name="serverExpandAnimation" enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
+            <div v-if="open && openable" class="message-body has-text-white">
+                <ServerInterior ref="interior" :server="server"></ServerInterior>
+            </div>
+        </transition>
         </div>
+        
     </article>
 </template>
 
@@ -133,6 +138,7 @@ export default class Server extends Vue {
 {
     height: 250px;
     background-color: hsl(0, 0%, 21%);
+    border: none;
 }
 
 .icon
@@ -143,5 +149,9 @@ export default class Server extends Vue {
 
 .ip {
     margin-left: 0.25rem;
+}
+
+.transition-wrapper {
+    overflow: hidden;
 }
 </style>

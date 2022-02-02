@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteLocation } from 'vue-router';
-import { ArgumentError, GFLBansError, HTTPError, NetworkError, SecurityError, setError, StateError } from './errors';
+import { GFLBansError, HTTPError, NetworkError, SecurityError, setError, StateError } from './errors';
 import { finish_login } from './gflbans/login';
 import { adminPermissions } from './globals';
 import { store } from './state';
@@ -17,6 +17,7 @@ const routes = [
   { path: '/', component: Home, alias: '/home' },
   { path: '/error', component: ErrorPage },
   { path: '/servers', component: Servers },
+  { path: '/infractions/:infractionId', component: Infractions, props: (route: any) => ({ mode: route.query.mode ? parseInt(route.query.mode) : 0, argument: route.query.argument ? route.query.argument : ''  }) },
   { path: '/infractions', component: Infractions, props: (route: any) => ({ mode: route.query.mode ? parseInt(route.query.mode) : 0, argument: route.query.argument ? route.query.argument : ''  }) },
   { path: '/gql-doc', component: GQLDoc },
   {
@@ -78,7 +79,7 @@ const routes = [
   },
   // not found route
   { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage, meta: {
-      'error_detail': 'The requested path does not exist.'
+      'error_detail': 'The path you have specified does not match any defined route.'
   } },
 ];
 

@@ -1,0 +1,30 @@
+
+/* Infraction Colors */    
+$ban: #de3e80
+$vmute: #a56de2
+$tmute: #3689e6
+$caban: #28bca3
+$acban: #68b723
+$warn: #f9c440
+
+$colors: ("ban": $ban, "vmute": $vmute, "tmute": $tmute, "caban": $caban, "acban": $acban, "warn": $warn )
+
+@each $name, $color in $colors
+    .has-text-infraction-#{$name}
+        color: $color !important
+
+/* Infraction State Colors */
+$permanent: #ed5353 // used for permanent infractions
+$tickingNorm: #ffa154 // used for unexpired "normal" infractions
+$tickingDec: #ffe16b // used for actively ticking time dec infractions
+$session: #43d6b5
+$expired: #9bdb4d // if an tickingNorm infract's expiration has passed or tickingDec's timer hits 0
+$removed: #9bdb4d // if the infraction is removed by an administrator
+$paused: #cd9ef7 // if tickingDec's timer is paused
+$unknown: #d4d4d4 // If the infraction has an invalid state
+
+$states: ("permanent": $permanent, "ticking-normal": $tickingNorm, "ticking-dec": $tickingDec, "expired": $expired, "removed": $removed, "paused": $paused, "session": $session, "unknown": $unknown)
+
+@each $name, $color in $states
+    .has-text-infraction-state-#{$name}
+        color: $color !important

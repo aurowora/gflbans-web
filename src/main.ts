@@ -6,20 +6,18 @@
 import { createApp } from 'vue'
 import App from '@/App.vue';
 import { store, key } from '@/state';
-import { createRouter, createWebHistory, RouteLocation } from 'vue-router';
-import { finish_login } from './gflbans/login';
-import '@/assets/css/bulma.scss';
+import '@/assets/css/bulma.sass';
 import '@/assets/css/site.scss';
 
 // Setup the icons
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faExclamationTriangle, faGavel, faHome, faServer, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faGavel, faHome, faServer, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard, faArrowsRotate, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import VueScreen from 'vue-screen';
 import router from './routes';
 
-library.add(faGavel, faHome, faServer, faExclamationTriangle, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard, faArrowLeft, faArrowRight);
+library.add(faGavel, faHome, faServer, faExclamationTriangle, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard, faArrowsRotate, faArrowLeft, faArrowRight);
 
 // Initialize the app
 

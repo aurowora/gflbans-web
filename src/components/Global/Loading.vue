@@ -4,42 +4,44 @@
 -->
 
 <template>
-  <div v-if="this.$store.state.loading" class="modal is-active">
-    <div class="modal-background"></div>
-    <div class="sk-cube-grid">
-      <div class="sk-cube sk-cube1">
-        <img class="animated" src="@/assets/cubes/3.webp" />
+  <transition name="mainLoaderEnterExit" leave-active-class="animated fadeOut" enter-active-class="">
+    <div v-if="this.$store.state.loading" class="modal is-active">
+      <div class="modal-background"></div>
+      <div class="sk-cube-grid">
+        <div class="sk-cube sk-cube1">
+          <img class="animated" src="@/assets/cubes/3.webp" />
+        </div>
+        <div class="sk-cube sk-cube2">
+          <img class="animated" src="@/assets/cubes/2.webp" />
+        </div>
+        <div class="sk-cube sk-cube3">
+          <img class="animated" src="@/assets/cubes/1.webp" />
+        </div>
+        <div class="sk-cube sk-cube4">
+          <img class="animated" src="@/assets/cubes/6.webp" />
+        </div>
+        <div class="sk-cube sk-cube5">
+          <img class="animated" src="@/assets/cubes/5.webp" />
+        </div>
+        <div class="sk-cube sk-cube6">
+          <img class="animated" src="@/assets/cubes/4.webp" />
+        </div>
+        <div class="sk-cube sk-cube7">
+          <img class="animated" src="@/assets/cubes/9.webp" />
+        </div>
+        <div class="sk-cube sk-cube8">
+          <img class="animated" src="@/assets/cubes/8.webp" />
+        </div>
+        <div class="sk-cube sk-cube9">
+          <img class="animated" src="@/assets/cubes/7.webp" />
+        </div>
       </div>
-      <div class="sk-cube sk-cube2">
-        <img class="animated" src="@/assets/cubes/2.webp" />
-      </div>
-      <div class="sk-cube sk-cube3">
-        <img class="animated" src="@/assets/cubes/1.webp" />
-      </div>
-      <div class="sk-cube sk-cube4">
-        <img class="animated" src="@/assets/cubes/6.webp" />
-      </div>
-      <div class="sk-cube sk-cube5">
-        <img class="animated" src="@/assets/cubes/5.webp" />
-      </div>
-      <div class="sk-cube sk-cube6">
-        <img class="animated" src="@/assets/cubes/4.webp" />
-      </div>
-      <div class="sk-cube sk-cube7">
-        <img class="animated" src="@/assets/cubes/9.webp" />
-      </div>
-      <div class="sk-cube sk-cube8">
-        <img class="animated" src="@/assets/cubes/8.webp" />
-      </div>
-      <div class="sk-cube sk-cube9">
-        <img class="animated" src="@/assets/cubes/7.webp" />
-      </div>
+      <p id="loadMessage">
+        Loading...
+        <img class="loader-emote" src="@/assets/animated/pinwheel.webp" alt=":pinwheel:" />
+      </p>
     </div>
-    <p id="loadMessage">
-      Loading...
-      <img class="loader-emote" src="@/assets/animated/pinwheel.webp" alt=":pinwheel:" />
-    </p>
-  </div>
+  </transition>
 </template>
 
 <script lang="ts">

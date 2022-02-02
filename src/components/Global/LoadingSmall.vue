@@ -4,14 +4,16 @@
 -->
 
 <template>
-  <div v-if="$store.state.small_loading.is_loading" :class="[$store.getters.isThemeClass]" class="notification">
-    <div class="is-flex">
-        <div class="loader-outer">
-            <span class="loader"></span>
-        </div>
-        <span class="is-flex-grow-1 load-text">{{$store.state.small_loading.loader_text}}</span>
+  <transition name="loaderAppearDisappear" enter-active-class="animated fadeIn faster" leave-active-class="animated fadeOut faster">
+    <div v-if="$store.state.small_loading.is_loading" :class="[$store.getters.isThemeClass]" class="notification">
+      <div class="is-flex">
+          <div class="loader-outer">
+              <span class="loader"></span>
+          </div>
+          <span class="is-flex-grow-1 load-text">{{$store.state.small_loading.loader_text}}</span>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -36,7 +38,7 @@ export default class LoadingSmall extends Vue {}
 
 
 div.notification {
-    position: absolute;
+    position: fixed;
     z-index: 100;
     right: 10px;
     bottom: 10px;
