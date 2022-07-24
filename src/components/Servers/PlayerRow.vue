@@ -7,9 +7,9 @@
     <div class="list-item">
         <div class="list-item-image">
             <figure class="image is-64x64">
-                <img v-if="player.gs_avatar" class="is-rounded" :src="`${INST}file/uploads/${player.gs_avatar.file_id}/avatar.webp`" />
+                <img v-if="player.gs_avatar" class="slight-round" :src="`${INST}file/uploads/${player.gs_avatar.file_id}/avatar.webp`" />
                 <!--TODO: Default avatar image -->
-                <img v-else class="is-rounded" src="@/assets/animated/pinwheel.webp" />
+                <img v-else class="slight-round" src="@/assets/animated/pinwheel.webp" />
             </figure>
         </div>
 
@@ -28,7 +28,7 @@
                         <span>Kick</span>
                     </span>
                 </button>
-                <button v-if="serviceSupported" @click="openCurrentProfile" class="button is-outlined" :class="$store.getters.isThemeClass">
+                <button v-if="serviceSupported" @click="openCurrentProfile" class="button is-outlined" :class="[$store.getters.isThemeClass]">
                     <span class="icon-text">
                         <span class="icon">
                             <font-awesome-icon icon="address-card"></font-awesome-icon>

@@ -13,11 +13,11 @@ import '@/assets/css/site.scss';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faExclamationTriangle, faGavel, faHome, faServer, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard, faArrowsRotate, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faGavel, faCog, faHome, faServer, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard, faArrowsRotate, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import VueScreen from 'vue-screen';
 import router from './routes';
 
-library.add(faGavel, faHome, faServer, faExclamationTriangle, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard, faArrowsRotate, faArrowLeft, faArrowRight);
+library.add(faGavel, faHome, faServer, faExclamationTriangle, faUserShield, faRightToBracket, faSignOut, faBan, faAddressCard, faArrowsRotate, faArrowLeft, faArrowRight, faCog);
 
 // Initialize the app
 

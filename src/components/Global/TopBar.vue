@@ -14,9 +14,9 @@
           <span id="logoText" class="is-size-4 has-text-weight-bold">{{APP_NAME}}</span>
         </span>
       </router-link>
-      <a role="button" :class="{ 'is-active': nav_open }" class="navbar-burger is-hidden-desktop  " aria-label="menu" aria-expanded="false" v-on:click="toggleMenu">
+      <a role="button" :class="{ 'is-active': nav_open }" class="navbar-burger is-hidden-desktop" aria-label="menu" aria-expanded="false" v-on:click="toggleMenu">
           <template v-if="loggedIn">
-            <img id="avImg1" :src="avatar" />
+              <img class="slight-round" id="avImg1" :src="avatar" />
           </template>
           <template v-else>
             <span aria-hidden="true"></span>
@@ -103,7 +103,7 @@ export default class TopBar extends Vue {
     if (this.$store.state.current_user && this.$store.state.current_user.avatar_id) {
       return `${INSTANCE}file/uploads/${this.$store.state.current_user.avatar_id}/avatar.webp`;
     } else {
-      return "@/images/default_avatar.webp";
+      return "@/assets/other/fallback_av.webp";
     }
   }
 
@@ -178,7 +178,6 @@ a:hover > span > span {
 
 #avImg1
 {
-  border-radius: 50%;
   height: 65%;
   width: auto;
   border-color: white;

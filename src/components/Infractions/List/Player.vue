@@ -1,8 +1,8 @@
 <template>
     <div class="is-flex is-align-items-center">
         <figure class="image is-32x32">
-            <img class="is-rounded" :src="`${INST}file/uploads/${player.gs_avatar.file_id}/avatar.webp`" @error="error = true" v-if="player.gs_avatar && !error">
-            <img class="is-rounded" src="@/assets/animated/pinwheel.webp" v-else>
+            <img class="slight-round" :src="`${INST}file/uploads/${player.gs_avatar.file_id}/avatar.webp`" @error="error = true" v-if="player.gs_avatar && !error">
+            <img class="slight-round" src="@/assets/other/fallback_av.webp" v-else>
         </figure>
         <span class="restrict_length" v-if="this.player.gs_name">{{ this.player.gs_name }}</span>
         <UserIP v-else-if="!this.player.gs_id && this.player.ip !== 'MISSING_PERMISSIONS'" :ip="this.player.ip"></UserIP>

@@ -2,7 +2,7 @@
     <nav class="pagination" role="navigation" aria-label="pagination">
         
         <!-- This will serve as the refresh button -->
-        <a class="pagination-previous has-background-grey-darker" @click="goto(current_page)">
+        <a class="pagination-previous has-background-grey-darker" href="#">
             <span class="icon">
                 <font-awesome-icon icon="arrows-rotate"></font-awesome-icon>
             </span>
@@ -20,20 +20,29 @@
             </li>
 
             <!-- 1 is valid always? -->
-            <li><a @click="goto(1)" class="pagination-link" :class="current_page === 1 ? ['is-current', $store.getters.hasBackgroundThemeClass] : ['has-background-grey-darker']" aria-label="Goto page 1">1</a></li>
+            <li>
+                <a v-if="current_page != 1" @click="goto(1)" class="pagination-link has-background-grey-darker" aria-label="Goto page 1">1</a>
+                <a v-else class="pagination-link is-current" :class="[$store.getters.hasBackgroundThemeClass]" href="#">1</a>
+            </li>
 
             <!-- If 1 isn't the third back, we need to draw ... -->
 
             <li v-if="current_page - 3 > 1"><span class="pagination-ellipsis">&hellip;</span></li>
 
             <template v-for="idx in seq" :key=idx>
-                <li><a @click="goto(idx)" class="pagination-link" :class="current_page === idx ? ['is-current', $store.getters.hasBackgroundThemeClass] : ['has-background-grey-darker']" :aria-label="`Goto page ${idx}`">{{ idx }}</a></li>
+                <li>
+                    <a @click="goto(idx)" class="pagination-link has-background-grey-darker" :aria-label="`Goto page ${idx}`" v-if="idx != current_page">{{ idx }}</a>
+                    <a href="#" class="pagination-link is-current" :class="[$store.getters.hasBackgroundThemeClass]" v-else>{{ idx }}</a>
+                </li>
             </template>
 
             <!-- If the end isnt within 3 pages, we also need ... -->
             <li v-if="current_page + 3 < total_pages"><span class="pagination-ellipsis">&hellip;</span></li>
 
-            <li><a @click="goto(total_pages)" class="pagination-link" :class="current_page == total_pages ? ['is-current', $store.getters.hasBackgroundThemeClass] : ['has-background-grey-darker']" :aria-label="`Goto page ${total_pages}`">{{ total_pages }}</a></li>
+            <li>
+                <a @click="goto(total_pages)" class="pagination-link has-background-grey-darker" :aria-label="`Goto page ${total_pages}`" v-if="total_pages != current_page">{{ total_pages }}</a>
+                <a href="#" class="pagination-link is-current" :class="[$store.getters.hasBackgroundThemeClass]" v-else>{{ total_pages }}</a>
+            </li>
 
             <li v-if="nextVisible">
                 <a @click="next()" class="pagination-link has-background-grey-darker">

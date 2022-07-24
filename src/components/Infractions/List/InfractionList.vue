@@ -7,6 +7,7 @@
             <th class="is-hidden-touch">Restrictions</th>
             <th class="is-hidden-desktop hide-550">Restr.</th>
             <th>Player</th>
+            <th class="is-hidden-touch is-hidden-desktop-only is-hidden-widescreen-only">Admin</th>
             <th class="is-hidden-touch is-hidden-desktop-only" width="100%">Reason</th>
             <th>Remaining</th>
         </thead>

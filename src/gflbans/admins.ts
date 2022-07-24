@@ -51,4 +51,4 @@ async function get_admin_info(admin_id: string): Promise<NetworkError | HTTPErro
     }
 }
 
-export { get_admin_info };
+export { get_admin_info, IAdminInfo };

@@ -22,6 +22,11 @@
             <Player :player="infraction.player"></Player>
         </div>
     </td>
+    <td class="nowrap is-hidden-touch is-hidden-desktop-only is-hidden-widescreen-only">
+        <div class="is-flex">
+            <Player :player="fake_player_from_admin"></Player>
+        </div>
+    </td>
     <td class="cliplong is-hidden-touch is-hidden-desktop-only">{{ infraction.reason }}</td>
     <td>
         <div class="icon-text nowrap" :class="[`has-text-infraction-state-${remaining.Color}`]" :data-tooltip="remaining.Tip">
@@ -45,6 +50,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { InfractionFlags } from "@/globals";
 import '@/assets/css/infractionColors.sass';
 import Player from "./Player.vue";
+import { get_admin_info, IAdminInfo } from "@/gflbans/admins";
+import { GFLBansError } from "@/errors";
 
 
 dayjs.extend(localizedFormat);
@@ -83,6 +90,7 @@ function formatDur(duration: number, caps = false): string {
 })
 export default class Infraction extends Vue {
     infraction!: IInfraction
+    fadmin: IAdminInfo | null = null;
 
     get service_icon() {
         switch (this.infraction.player.gs_service) {
@@ -93,6 +101,34 @@ export default class Infraction extends Vue {
             default:
                 return faQuestion;
         }
+    }
+
+    get fake_player_from_admin() {
+        if (!this.infraction.admin || this.infraction.flags & InfractionFlags.SYSTEM) {
+            return {
+                gs_service: 'fake',
+                gs_id: 'fake',
+                gs_name: 'System'
+            }
+        }
+
+        const tr = this;
+        get_admin_info(this.infraction.admin.toString()).then(r => {
+            if (r instanceof GFLBansError) {
+                console.log(r);
+            } else {
+                tr.fadmin = r;
+            }
+        }).catch(function (e) {
+            console.log(e)
+        })
+
+        return {
+            gs_service: 'fake',
+            gs_id: 'fake',
+            gs_name: (this.fadmin && this.fadmin.admin_name) ? this.fadmin.admin_name : 'Admin',
+            gs_avatar: (this.fadmin && this.fadmin.avatar_id) ? {file_id: this.fadmin.avatar_id} : undefined
+        }  
     }
 
     get created_time() {

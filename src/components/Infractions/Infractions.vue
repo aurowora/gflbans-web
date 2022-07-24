@@ -4,8 +4,9 @@
 -->
 
 <template>
-  <div class="pageBase container">
+  <div class="pageBase ibase">
       <div class="section" v-if="infractions && total_infractions > 0">
+        <InfractionWarning></InfractionWarning>
         <h1 class="title has-text-white">{{ pageTitle }}</h1>
         <h2 class="subtitle is-size-7 has-text-white semitransparent">
           {{ in_view }} of {{ total_infractions }} total results
@@ -16,7 +17,7 @@
       </div>
       <NoResults :mode="mode" :argument="argument" v-else></NoResults>
   </div>
-  <Modal ref="detailsModal"></Modal>
+  <InfractionSummary ref="detailsModal"></InfractionSummary>
 </template>
 
 <script lang="ts">
@@ -33,14 +34,16 @@ import NoResults from "./List/NoResults.vue";
 import { MAX_INFRACTIONS_PER_PAGE } from "@/config";
 import InfractionList from "./List/InfractionList.vue";
 import { handleRouteUpdate } from './Infractions';
-import Modal from "./Summary/Modal.vue";
+import InfractionSummary from "./Summary/InfractionSummary.vue";
+import InfractionWarning from "./InfractionWarning.vue";
 
 @Options({
   components: {
     Pagination,
     NoResults,
     InfractionList,
-    Modal
+    InfractionSummary,
+    InfractionWarning
   },
   // eslint-disable-next-line no-unused-vars
   beforeRouteEnter: function (to, from, next) {
@@ -62,7 +65,7 @@ export default class Infractions extends Vue {
   // template globals
   perPage = MAX_INFRACTIONS_PER_PAGE;
 
-  setData(mode: number, orig_arg: string, resolved: string, page_ov: number | null, total: number, infractions: IInfraction[] | null)
+  setData(mode: number, orig_arg: string, resolved: string, page_ov: number | null, total: number, infractions: IInfraction[] | null, open: string | null)
   {
     this.mode = mode;
     this.orig_arg = orig_arg;
@@ -70,6 +73,17 @@ export default class Infractions extends Vue {
     this.page = page_ov ? page_ov : 1;
     this.total_infractions = total;
     this.infractions = infractions;
+
+    if (open !== null && infractions !== null) {
+      for (let i = 0; i < infractions.length; i++) {
+        if (infractions[i].id === open) {
+          (this.$refs.detailsModal as InfractionSummary).activate(infractions[i]);
+          return;
+        }
+      }
+
+      console.log(`could not find ${open} in ${infractions}`)
+    }
   }
 
   handleNav(page: number)
@@ -92,8 +106,7 @@ export default class Infractions extends Vue {
     for (let i = 0; i < this.infractions.length; i++) {
       if (this.infractions[i].id === infractionId)
       {
-        (this.$refs.detailsModal as Modal).active = true;
-        (this.$refs.detailsModal as Modal).infraction = this.infractions[i];
+        (this.$refs.detailsModal as InfractionSummary).activate(this.infractions[i]);
         break;
       }
     }
@@ -131,10 +144,10 @@ export default class Infractions extends Vue {
     if (this.infractions === null) {
       return "";
     }
-    return `${(this.page - 1) * 30 + 1}-${
+    return `${(this.page - 1) * MAX_INFRACTIONS_PER_PAGE + 1}-${
       this.pages > this.page
-        ? this.page * 30
-        : (this.page - 1) * 30 + this.infractions.length
+        ? this.page * MAX_INFRACTIONS_PER_PAGE
+        : (this.page - 1) * MAX_INFRACTIONS_PER_PAGE + this.infractions.length
     }`;
   }
 
@@ -147,5 +160,10 @@ export default class Infractions extends Vue {
 <style scoped>
 .semitransparent {
   opacity: 0.6;
+}
+
+.ibase {
+  padding-left: 5%;
+  padding-right: 5%;
 }
 </style>

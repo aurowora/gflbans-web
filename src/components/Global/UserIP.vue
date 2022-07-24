@@ -1,6 +1,6 @@
 <!-- A component that hides user IPs (but can be toggled to show them) -->
 <template>
-    <span class="icon-text" @click="ipVisible = !ipVisible" :class="{'is-closed': !ipVisible}">
+    <span class="icon-text" @click.stop="ipVisible = !ipVisible" :class="{'is-closed': !ipVisible}">
         <span>{{ ipVisible ? ip : 'IP Hidden'}}</span>
         <span class="icon">
             <font-awesome-icon :icon="icon"></font-awesome-icon>

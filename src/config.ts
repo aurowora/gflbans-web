@@ -23,6 +23,11 @@ export const INSTANCE = "https://bans.aurora.vg/";
 */
 export const PUBLIC_URI  = "http://127.0.0.1:8080/";
 
+/*
+  Community's Home Page
+*/
+export const COMMUNITY_HOME = 'https://gflclan.com';
+
 
 /*
   The name of the application for branding purposes.

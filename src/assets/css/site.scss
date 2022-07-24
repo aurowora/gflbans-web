@@ -62,7 +62,19 @@ html, body, #app {
 @import '~animate.css/source/fading_entrances/fadeIn.css';
 @import '~animate.css/source/fading_exits/fadeOut.css';
 
+/* Used in InfractionSummary */
+@import '~animate.css/source/zooming_entrances/zoomIn';
+@import '~animate.css/source/zooming_exits/zoomOut';
+
 /* Used in Server.vue */
 @import '~animate.css/source/sliding_entrances/slideInDown.css';
 //@import '~animate.css/source/sliding_entrances/slideInUp.css';
 @import '~animate.css/source/sliding_exits/slideOutUp.css';
+
+/* 
+    Profile Photos are rounded 
+    I tried playing around with how rounded they looked, but i don't really like anything but the circle
+*/
+.slight-round {
+    border-radius: 2px;
+}

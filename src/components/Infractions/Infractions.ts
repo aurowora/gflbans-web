@@ -8,7 +8,7 @@
 import { MAX_INFRACTIONS_PER_PAGE } from "@/config";
 import { ArgumentError, EncodingError, GFLBansError, HTTPError, NetworkError, setError } from "@/errors";
 import { get_admin_info } from "@/gflbans/admins";
-import { get_infractions, IGetInfractionsResult, IInfraction } from "@/gflbans/infractions";
+import { get_infractions, get_infraction_position, IGetInfractionsResult, IInfraction } from "@/gflbans/infractions";
 import { IPlayer } from "@/gflbans/servers";
 import { sleep, strictParseInt } from "@/gflbans/utils";
 import { InfractionModes } from "@/globals";
@@ -16,7 +16,7 @@ import { store as globalStore } from "@/state";
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 interface InfractionsPage {
-    setData(mode: number, orig_arg: string, resolved: string, page_ov: number | null, total: number, infractions: IInfraction[] | null): void
+    setData(mode: number, orig_arg: string, resolved: string, page_ov: number | null, total: number, infractions: IInfraction[] | null, open_idx: string | null): void
 }
 
 function argAsXql(
@@ -125,6 +125,7 @@ function argAsXql(
 
     // check if we need to find something
     const find = to.params.infractionId ? to.params.infractionId.toString() : null;
+    //const find = to.hash !== '' ? to.hash.slice(1) : null;
   
     // simple error handler
     function error(err: GFLBansError)
@@ -147,7 +148,7 @@ function argAsXql(
     function a() {
         const prom: any[] = []
       
-        if (mode == InfractionModes.VIEW_SERVER || mode == InfractionModes.VIEW_ADMIN || mode == InfractionModes.VIEW_PLAYER || mode == InfractionModes.SEARCH)
+        if (mode == InfractionModes.VIEW_SERVER || mode == InfractionModes.VIEW_ADMIN || mode == InfractionModes.VIEW_PLAYER)
         {
           const query = argAsXql(mode, argument);
       
@@ -156,10 +157,12 @@ function argAsXql(
             return error(query);
           }
       
-          prom.push(get_infractions(page, query[0], null, query[1]));
+          prom.push(get_infractions(page, query[0], query[1]));
           prom.push(resolveArgument(mode, argument));
         } else if (mode == InfractionModes.NORMAL) {
-          prom.push(get_infractions(page, null, null, true));
+          prom.push(get_infractions(page, null, true));
+        } else if (mode == InfractionModes.SEARCH) {
+          prom.push(get_infractions(page, argument, false));
         } else {
           return error(new ArgumentError(`Invalid infraction loader mode ${mode}`))
         }
@@ -198,11 +201,11 @@ function argAsXql(
       
           if (tr)
           {
-            tr.setData(mode, argument, r_arg, page, val1.total_results, val1.infractions);
+            tr.setData(mode, argument, r_arg, page, val1.total_results, val1.infractions, find);
             next();
           } else {
             // typescript moment
-            next(vm => ((vm as unknown) as InfractionsPage).setData(mode, argument, r_arg, page, val1.total_results, val1.infractions));
+            next(vm => ((vm as unknown) as InfractionsPage).setData(mode, argument, r_arg, page, val1.total_results, val1.infractions, find));
           }
           
       
@@ -221,7 +224,7 @@ function argAsXql(
       let p;
 
       if (mode === InfractionModes.NORMAL) {
-        p = get_infractions(page, null, find, true, true);
+        p = get_infraction_position(page, find, null);
       } else {
         const args = argAsXql(mode, argument)
 
@@ -230,18 +233,17 @@ function argAsXql(
           return error(args);
         }
 
-        p = get_infractions(page, args[0], find, args[1], true);
+        p = get_infraction_position(page, find, args[0], args[1]);
       }
 
       p.then(function (r) {
         if (r instanceof GFLBansError) {
           return error(r);
-        } else if (r.located_index === null) {
-          return error(new ArgumentError('located index was null during find request'))
         }
 
         // override the page
-        page = Math.ceil(r.located_index / MAX_INFRACTIONS_PER_PAGE);
+        page = Math.floor((r - 1) / MAX_INFRACTIONS_PER_PAGE) + 1;
+        console.log('find inf', find, 'pos', r, 'page', page);
         a();
       }).catch(function (e) {
         return error(new GFLBansError(e));

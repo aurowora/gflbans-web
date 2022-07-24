@@ -5,21 +5,21 @@
 
 <template>
   <div class="navbar-item" id="wrapAv">
-    <img :src="avatar" alt="User Avatar" />
+    <img class="slight-round" :src="avatar" alt="User Avatar" />
     <span>{{ user_name }}</span>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
 import { INSTANCE } from "@/config";
+import { Vue } from "vue-class-component";
 
 export default class UserButton extends Vue {
   get avatar() {
     if (this.$store.state.current_user && this.$store.state.current_user.avatar_id) {
       return `${INSTANCE}file/uploads/${this.$store.state.current_user.avatar_id}/avatar.webp`;
     } else {
-      return "@/assets/animated/pinwheel.webp";
+      return '@/assets/other/fallback_av.webp';
     }
   }
 
@@ -40,6 +40,5 @@ export default class UserButton extends Vue {
 
   img {
     margin-right: 5px;
-    border-radius: 50%;
   }
 </style>

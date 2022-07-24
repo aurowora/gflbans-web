@@ -12,6 +12,13 @@ $colors: ("ban": $ban, "vmute": $vmute, "tmute": $tmute, "caban": $caban, "acban
 @each $name, $color in $colors
     .has-text-infraction-#{$name}
         color: $color !important
+    
+// support usage on tags
+.tag:not(body)
+    @each $name, $color in $colors
+        &.is-#{$name}
+            background-color: $color
+            color: white
 
 /* Infraction State Colors */
 $permanent: #ed5353 // used for permanent infractions

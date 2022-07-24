@@ -31,12 +31,17 @@ interface GetReply {
   total_matched: number
 }
 
+interface LocReply {
+  location: number;
+}
+
 // IInfraction is the client side counterpart of PyAPI's Infraction type
 interface IInfraction {
     id: string;
     flags: number;
     created: number;
     expires?: number; // undef if permanent or session
+    server?: string;
 
     player: IInfractionPlayer;
     admin?: number;
@@ -61,52 +66,28 @@ interface IInfraction {
     last_heartbeat?: number;
 }
 
-async function get_infractions(page: number, query: string | null = null, find_infraction: string | null = null, strict_xql = false, head_only = false): Promise<EncodingError | NetworkError | HTTPError | ArgumentError | IGetInfractionsResult>
+async function get_infractions(page: number, query: string | null = null, strict_xql = false): Promise<EncodingError | NetworkError | HTTPError | ArgumentError | IGetInfractionsResult>
 {
     let responseText = "";
 
   try {
-    const response = await fetch(`${INSTANCE}api/v1/infractions${query !== null ? "/search?xql_string=" + encodeURIComponent(query) + `&strict_xql=${strict_xql}&` : "/?"}limit=${MAX_INFRACTIONS_PER_PAGE}&skip=${(page - 1) * MAX_INFRACTIONS_PER_PAGE}&load_fast=false${find_infraction ? "&locate=" + encodeURIComponent(find_infraction) : ''}`, {
+    const response = await fetch(`${INSTANCE}api/v1/infractions${query !== null ? "/search?xql_string=" + encodeURIComponent(query) + `&strict_xql=${strict_xql}&` : "/?"}limit=${MAX_INFRACTIONS_PER_PAGE}&skip=${(page - 1) * MAX_INFRACTIONS_PER_PAGE}&load_fast=false`, {
       mode: PRODUCTION ? 'same-origin' : 'cors',
       credentials: PRODUCTION ? 'same-origin' : 'include',
-      method: head_only ? 'HEAD' : 'GET'
+      method: 'GET'
     });
 
     if (!response.ok) {
-      return new HTTPError(response.status, head_only ? 'NO BODY' : await response.text());
+      return new HTTPError(response.status, await response.text());
     }
 
-    if (!head_only) {
-      responseText = await response.text();
-    }
-
-    let i_located_index = null;
-    if (find_infraction)
-    {
-        const idx = response.headers.get('X-Located-Index');
-        const p_idx = idx ? parseInt(idx) : null;
-        i_located_index = p_idx && !isNaN(p_idx) ? p_idx : null;
-
-        if (!i_located_index)
-        {
-          return new NetworkError('Sent locate query param, but didn\'t receive expected X-Located-Index header (misconfigured CORS?)');
-        }
-
-        if (head_only) {
-          return {
-            infractions: [],
-            total_results: 0,
-            located_index: i_located_index
-          }
-        }
-    }
+    responseText = await response.text();
 
     const rpl = JSON.parse(responseText) as GetReply
 
     return {
         infractions: rpl.results,
-        total_results: rpl.total_matched,
-        located_index: i_located_index
+        total_results: rpl.total_matched
     }
   } catch (e: any) {
     if (e instanceof SyntaxError) {
@@ -121,7 +102,35 @@ interface IGetInfractionsResult
 {
   infractions: IInfraction[],
   total_results: number;
-  located_index: number | null;
 }
 
-export { IInfraction, IComment, IInfractionPlayer, get_infractions, IGetInfractionsResult };
+async function get_infraction_position(page: number, find_infraction: string, query: string | null = null, strict_xql = false): Promise<EncodingError | NetworkError | HTTPError | ArgumentError | number>
+{
+    let responseText = "";
+
+  try {
+    const response = await fetch(`${INSTANCE}api/v1/infractions${query !== null ? "/locate_with_search?xql_string=" + encodeURIComponent(query) + `&strict_xql=${strict_xql}&` : "/locate?"}limit=${MAX_INFRACTIONS_PER_PAGE}&skip=${(page - 1) * MAX_INFRACTIONS_PER_PAGE}&load_fast=false&find=${encodeURIComponent(find_infraction)}`, {
+      mode: PRODUCTION ? 'same-origin' : 'cors',
+      credentials: PRODUCTION ? 'same-origin' : 'include',
+      method: 'GET'
+    });
+
+    if (!response.ok) {
+      return new HTTPError(response.status, await response.text());
+    }
+
+    responseText = await response.text();
+
+    const rpl = JSON.parse(responseText) as LocReply
+
+    return rpl.location;
+  } catch (e: any) {
+    if (e instanceof SyntaxError) {
+      return new EncodingError(e, responseText);
+    } else {
+      return new NetworkError(e);
+    }
+  }
+}
+
+export { IInfraction, IComment, IInfractionPlayer, get_infractions, IGetInfractionsResult, get_infraction_position };
